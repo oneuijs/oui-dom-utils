@@ -1,0 +1,11 @@
+{
+  "extends": "eslint-config-airbnb",
+  "env": {
+    "browser": true,
+    "mocha": true,
+    "node": true
+  },
+  "rules": {
+    "valid-jsdoc": 2
+  }
+}

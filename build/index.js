@@ -47,9 +47,8 @@ exports.default = {
     if (typeof el === 'string') el = document.querySelector(el);
     if (el.classList) {
       return el.classList.contains(className);
-    } else {
-      return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
     }
+    return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
   },
   insertAfter: function insertAfter(newEl, targetEl) {
     var parent = targetEl.parentNode;
@@ -61,9 +60,7 @@ exports.default = {
     }
   },
 
-  /**
-   * el can be an Element, NodeList or query string
-   */
+  // el can be an Element, NodeList or query string
   remove: function remove(el) {
     if (typeof el === 'string') {
       [].forEach.call(document.querySelectorAll(el), function (node) {
@@ -78,7 +75,7 @@ exports.default = {
         node.parentNode.removeChild(node);
       });
     } else {
-      console.error('you can only pass Element, array of Elements or query string as argument');
+      throw new Error('you can only pass Element, array of Elements or query string as argument');
     }
   },
   forceReflow: function forceReflow(el) {
@@ -166,22 +163,22 @@ exports.default = {
       style[att] = val;
     }
   },
-  setStyles: function setStyles(node, hash) {
+  setStyles: function setStyles(el, hash) {
     var _this2 = this;
 
-    var HAS_CSSTEXT_FEATURE = typeof node.style.cssText != 'undefined';
+    var HAS_CSSTEXT_FEATURE = typeof el.style.cssText !== 'undefined';
     function trim(str) {
       return str.replace(/^\s+|\s+$/g, '');
     }
     var originStyleText = undefined;
     var originStyleObj = {};
     if (!!HAS_CSSTEXT_FEATURE) {
-      originStyleText = node.style.cssText;
+      originStyleText = el.style.cssText;
     } else {
-      originStyleText = node.getAttribute('style', styleText);
+      originStyleText = el.getAttribute('style');
     }
     originStyleText.split(';').forEach(function (item) {
-      if (item.indexOf(':') != -1) {
+      if (item.indexOf(':') !== -1) {
         var obj = item.split(':');
         originStyleObj[trim(obj[0])] = trim(obj[1]);
       }
@@ -189,7 +186,7 @@ exports.default = {
 
     var styleObj = {};
     Object.keys(hash).forEach(function (item) {
-      _this2.setStyle(node, item, hash[item], styleObj);
+      _this2.setStyle(el, item, hash[item], styleObj);
     });
     var mergedStyleObj = Object.assign({}, originStyleObj, styleObj);
     var styleText = Object.keys(mergedStyleObj).map(function (item) {
@@ -197,13 +194,13 @@ exports.default = {
     }).join(' ');
 
     if (!!HAS_CSSTEXT_FEATURE) {
-      node.style.cssText = styleText;
+      el.style.cssText = styleText;
     } else {
-      node.setAttribute('style', styleText);
+      el.setAttribute('style', styleText);
     }
   },
-  getStyle: function getStyle(node, att, style) {
-    style = style || node.style;
+  getStyle: function getStyle(el, att, style) {
+    style = style || el.style;
 
     var val = '';
 
@@ -211,7 +208,7 @@ exports.default = {
       val = style[att];
 
       if (val === '') {
-        val = this.getComputedStyle(node, att);
+        val = this.getComputedStyle(el, att);
       }
     }
 
@@ -224,7 +221,7 @@ exports.default = {
     // null means not return presudo styles
     var computed = win.getComputedStyle(el, null);
 
-    return attr ? computed.attr : computed;
+    return att ? computed.att : computed;
   },
   getPageSize: function getPageSize() {
     var xScroll = undefined,
@@ -300,17 +297,15 @@ exports.default = {
     return document.querySelectorAll(selector);
   },
 
-  /**
-   * selector 可选。字符串值，规定在何处停止对祖先元素进行匹配的选择器表达式。
-   * filter   可选。字符串值，包含用于匹配元素的选择器表达式。
-   */
+  // selector 可选。字符串值，规定在何处停止对祖先元素进行匹配的选择器表达式。
+  // filter   可选。字符串值，包含用于匹配元素的选择器表达式。
   parentsUntil: function parentsUntil(el, selector, filter) {
     var result = [];
     var matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
     // match start from parent
     el = el.parentElement;
     while (el && !matchesSelector.call(el, selector)) {
-      if (filter == null) {
+      if (!filter) {
         result.push(el);
       } else {
         if (matchesSelector.call(el, filter)) {
@@ -337,8 +332,10 @@ exports.default = {
   },
 
   /**
-   * @param {number} to assign the scrollTop value
-   * @param {number} duration assign the animate duration
+   * scroll to location with animation
+   * @param  {Number} to       to assign the scrollTop value
+   * @param  {Number} duration assign the animate duration
+   * @return {Null}            return null
    */
   scrollTo: function scrollTo() {
     var _this3 = this;

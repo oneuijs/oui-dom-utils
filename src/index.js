@@ -5,7 +5,7 @@ export default {
   // el can be an Element, NodeList or selector
   addClass(el, className) {
     if (typeof el === 'string') el = document.querySelectorAll(el);
-    let els = (el instanceof NodeList) ? [].slice.call(el) : [el];
+    const els = (el instanceof NodeList) ? [].slice.call(el) : [el];
 
     els.forEach(e => {
       if (this.hasClass(e, className)) { return; }
@@ -21,7 +21,7 @@ export default {
   // el can be an Element, NodeList or selector
   removeClass(el, className) {
     if (typeof el === 'string') el = document.querySelectorAll(el);
-    let els = (el instanceof NodeList) ? [].slice.call(el) : [el];
+    const els = (el instanceof NodeList) ? [].slice.call(el) : [el];
 
     els.forEach(e => {
       if (e.classList) {
@@ -37,13 +37,12 @@ export default {
     if (typeof el === 'string') el = document.querySelector(el);
     if (el.classList) {
       return el.classList.contains(className);
-    } else {
-      return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
     }
+    return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
   },
 
   insertAfter(newEl, targetEl) {
-    let parent = targetEl.parentNode;
+    const parent = targetEl.parentNode;
 
     if (parent.lastChild === targetEl) {
       parent.appendChild(newEl, targetEl);
@@ -52,9 +51,7 @@ export default {
     }
   },
 
-  /**
-   * el can be an Element, NodeList or query string
-   */
+  // el can be an Element, NodeList or query string
   remove(el) {
     if (typeof el === 'string') {
       [].forEach.call(document.querySelectorAll(el), node => {
@@ -69,7 +66,7 @@ export default {
         node.parentNode.removeChild(node);
       });
     } else {
-      console.error('you can only pass Element, array of Elements or query string as argument');
+      throw new Error('you can only pass Element, array of Elements or query string as argument');
     }
   },
 
@@ -95,7 +92,7 @@ export default {
 
   outerHeightWithMargin(el) {
     let height = el.offsetHeight;
-    let style = getComputedStyle(el);
+    const style = getComputedStyle(el);
 
     height += (parseFloat(style.marginTop) || 0) + (parseFloat(style.marginBottom) || 0);
     return height;
@@ -107,7 +104,7 @@ export default {
 
   outerWidthWithMargin(el) {
     let width = el.offsetWidth;
-    let style = getComputedStyle(el);
+    const style = getComputedStyle(el);
 
     width += (parseFloat(style.marginLeft) || 0) + (parseFloat(style.marginRight) || 0);
     return width;
@@ -118,7 +115,7 @@ export default {
   },
 
   getOffset(el) {
-    let html = el.ownerDocument.documentElement;
+    const html = el.ownerDocument.documentElement;
     let box = { top: 0, left: 0 };
 
     // If we don't have gBCR, just use 0,0 rather than error
@@ -166,43 +163,43 @@ export default {
     }
   },
 
-  setStyles(node, hash) {
-    const HAS_CSSTEXT_FEATURE = typeof(node.style.cssText) != 'undefined';
+  setStyles(el, hash) {
+    const HAS_CSSTEXT_FEATURE = typeof(el.style.cssText) !== 'undefined';
     function trim(str) {
       return str.replace(/^\s+|\s+$/g, '');
     }
     let originStyleText;
-    let originStyleObj = {};
-    if(!!HAS_CSSTEXT_FEATURE) {
-      originStyleText = node.style.cssText;
+    const originStyleObj = {};
+    if (!!HAS_CSSTEXT_FEATURE) {
+      originStyleText = el.style.cssText;
     } else {
-      originStyleText = node.getAttribute('style', styleText);
+      originStyleText = el.getAttribute('style');
     }
     originStyleText.split(';').forEach(item => {
-      if(item.indexOf(':') != -1) {
-        let obj = item.split(':');
+      if (item.indexOf(':') !== -1) {
+        const obj = item.split(':');
         originStyleObj[trim(obj[0])] = trim(obj[1]);
       }
     });
 
-    let styleObj = {};
+    const styleObj = {};
     Object.keys(hash).forEach(item => {
-      this.setStyle(node, item, hash[item], styleObj);
+      this.setStyle(el, item, hash[item], styleObj);
     });
-    let mergedStyleObj = Object.assign({}, originStyleObj, styleObj);
-    let styleText = Object.keys(mergedStyleObj)
+    const mergedStyleObj = Object.assign({}, originStyleObj, styleObj);
+    const styleText = Object.keys(mergedStyleObj)
         .map(item => item + ': ' + mergedStyleObj[item] + ';')
         .join(' ');
-        
-    if(!!HAS_CSSTEXT_FEATURE) {
-      node.style.cssText = styleText;
+
+    if (!!HAS_CSSTEXT_FEATURE) {
+      el.style.cssText = styleText;
     } else {
-      node.setAttribute('style', styleText);
+      el.setAttribute('style', styleText);
     }
   },
 
-  getStyle(node, att, style) {
-    style = style || node.style;
+  getStyle(el, att, style) {
+    style = style || el.style;
 
     let val = '';
 
@@ -210,7 +207,7 @@ export default {
       val = style[att];
 
       if (val === '') {
-        val = this.getComputedStyle(node, att);
+        val = this.getComputedStyle(el, att);
       }
     }
 
@@ -223,7 +220,7 @@ export default {
     // null means not return presudo styles
     const computed = win.getComputedStyle(el, null);
 
-    return attr ? computed.attr : computed;
+    return att ? computed.att : computed;
   },
 
   getPageSize() {
@@ -294,17 +291,15 @@ export default {
     return document.querySelectorAll(selector);
   },
 
-  /**
-   * selector 可选。字符串值，规定在何处停止对祖先元素进行匹配的选择器表达式。
-   * filter   可选。字符串值，包含用于匹配元素的选择器表达式。
-   */
+  // selector 可选。字符串值，规定在何处停止对祖先元素进行匹配的选择器表达式。
+  // filter   可选。字符串值，包含用于匹配元素的选择器表达式。
   parentsUntil(el, selector, filter) {
-    let result = [];
-    let matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+    const result = [];
+    const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
     // match start from parent
     el = el.parentElement;
-    while(el && !matchesSelector.call(el, selector)) {
-      if (filter == null) {
+    while (el && !matchesSelector.call(el, selector)) {
+      if (!filter) {
         result.push(el);
       } else {
         if (matchesSelector.call(el, filter)) {
@@ -318,7 +313,7 @@ export default {
 
   // 获得匹配选择器的第一个祖先元素，从当前元素开始沿 DOM 树向上
   closest(el, selector) {
-    let matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+    const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
 
     while (el) {
       if (matchesSelector.call(el, selector)) {
@@ -331,16 +326,18 @@ export default {
   },
 
   /**
-   * @param {number} to assign the scrollTop value
-   * @param {number} duration assign the animate duration
+   * scroll to location with animation
+   * @param  {Number} to       to assign the scrollTop value
+   * @param  {Number} duration assign the animate duration
+   * @return {Null}            return null
    */
   scrollTo(to = 0, duration = 16) {
     if (duration < 0) {
       return;
     }
-    let diff = to - this.getDocumentScrollTop();
-    let perTick = diff / duration * 10;
-    window.requestAnimationFrame(() => {
+    const diff = to - this.getDocumentScrollTop();
+    const perTick = diff / duration * 10;
+    requestAnimationFrame(() => {
       if (Math.abs(perTick) > Math.abs(diff)) {
         this.setDocumentScrollTop(this.getDocumentScrollTop() + diff);
         return;

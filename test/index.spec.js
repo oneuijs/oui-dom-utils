@@ -1,7 +1,18 @@
-import chai, { expect } from 'chai';
-import { DOMUtils } from '../src/index.js';
+// FIXME: PhantomJS 1.9 doesn't support rAF, but IE10+ supports
+window.requestAnimationFrame = (function(){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          function( callback ){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
 
-describe('DOMUtils', () => {
+
+import chai, { expect } from 'chai';
+import D from '../src/index.js';
+
+describe('oui-dom-utils', () => {
   describe('#addClass', () => {
     beforeEach(() => {
       document.body.innerHTML = `
@@ -20,19 +31,19 @@ describe('DOMUtils', () => {
 
     it('can add className to element', () => {
       let el = document.querySelector(".item-i");
-      DOMUtils.addClass(el, 'newcls');
+      D.addClass(el, 'newcls');
       expect(el.className).to.equal('item-i item newcls');
     });
 
     it('can add className to elements matched the selector', () => {
-      DOMUtils.addClass('.item', 'newcls');
+      D.addClass('.item', 'newcls');
       expect(document.querySelectorAll('.item')[0].className).to.equal('item-i item newcls');
       expect(document.querySelectorAll('.item')[1].className).to.equal('item-ii item newcls');
     });
 
     it('can add className to NodeList', () => {
       const els = document.querySelectorAll('.item');
-      DOMUtils.addClass(els, 'newcls');
+      D.addClass(els, 'newcls');
       expect(document.querySelectorAll('.item')[0].className).to.equal('item-i item newcls');
       expect(document.querySelectorAll('.item')[1].className).to.equal('item-ii item newcls');
     });
@@ -56,12 +67,12 @@ describe('DOMUtils', () => {
 
     it('can remove className of element', () => {
       let el = document.querySelector(".item-i");
-      DOMUtils.removeClass(el, 'item');
+      D.removeClass(el, 'item');
       expect(el.className).to.equal('item-i');
     });
 
     it('can remove className of elements matched the selector', () => {
-      DOMUtils.removeClass('.item', 'item');
+      D.removeClass('.item', 'item');
       expect(document.querySelector('.item-i').className).to.equal('item-i');
       expect(document.querySelector('.item-ii').className).to.equal('item-ii');
     });
@@ -85,13 +96,13 @@ describe('DOMUtils', () => {
 
     it('return true if has class', () => {
       let el = document.querySelector(".item-i");
-      expect(DOMUtils.hasClass(el, 'item')).to.be.true;
-      expect(DOMUtils.hasClass(el, 'item-not')).to.be.false;
+      expect(D.hasClass(el, 'item')).to.be.true;
+      expect(D.hasClass(el, 'item-not')).to.be.false;
     });
 
     it('el can be selector', () => {
-      expect(DOMUtils.hasClass('.item', 'item-i')).to.be.true;
-      expect(DOMUtils.hasClass('.item', 'item-ii')).to.be.false;
+      expect(D.hasClass('.item', 'item-i')).to.be.true;
+      expect(D.hasClass('.item', 'item-ii')).to.be.false;
     });
   });
 
@@ -124,27 +135,27 @@ describe('DOMUtils', () => {
     });
 
     it('closest can query by tag name', () => {
-      let el = DOMUtils.closest(document.querySelector("li.item-a"), "ul");
+      let el = D.closest(document.querySelector("li.item-a"), "ul");
       expect(el.className).to.equal('level-2 list');
     });
 
     it('closest can query by class name', () => {
-      let el = DOMUtils.closest(document.querySelector("li.item-a"), ".list");
+      let el = D.closest(document.querySelector("li.item-a"), ".list");
       expect(el.className).to.equal('level-2 list');
     });
 
     it('closest can query by id', () => {
-      let el = DOMUtils.closest(document.querySelector("li.item-a"), "#ii");
+      let el = D.closest(document.querySelector("li.item-a"), "#ii");
       expect(el.className).to.equal('item-ii');
     });
 
     it('closest can query by complex query', () => {
-      let el = DOMUtils.closest(document.querySelector("li.item-a"), "ul.list");
+      let el = D.closest(document.querySelector("li.item-a"), "ul.list");
       expect(el.className).to.equal('level-2 list');
     });
 
     it('closest should return itself if matches', () => {
-      let el = DOMUtils.closest(document.querySelector("li.item-a"), "li.item-a");
+      let el = D.closest(document.querySelector("li.item-a"), "li.item-a");
       expect(el).to.equal(document.querySelector("li.item-a"));
     });
   });
@@ -178,24 +189,24 @@ describe('DOMUtils', () => {
     });
 
     it('return an array of parents until selector', () => {
-      let arr = DOMUtils.parentsUntil(document.querySelector("li.item-a"), ".level-1");
+      let arr = D.parentsUntil(document.querySelector("li.item-a"), ".level-1");
       expect(arr.length).to.equal(2);
     });
 
     it('if not match will return all up to html', () => {
-      let arr = DOMUtils.parentsUntil(document.querySelector("li.item-a"), ".item-a");
+      let arr = D.parentsUntil(document.querySelector("li.item-a"), ".item-a");
       expect(arr.length).to.equal(5);
     });
 
     it('if can filter returns', () => {
       let arr;
-      arr = DOMUtils.parentsUntil(document.querySelector("li.item-a"), "body", '.yes');
+      arr = D.parentsUntil(document.querySelector("li.item-a"), "body", '.yes');
       expect(arr.length).to.equal(2);
 
-      arr = DOMUtils.parentsUntil(document.querySelector("li.item-a"), "body", '.level-2.yes');
+      arr = D.parentsUntil(document.querySelector("li.item-a"), "body", '.level-2.yes');
       expect(arr[0]).to.equal(document.querySelector('.level-2'));
 
-      arr = DOMUtils.parentsUntil(document.querySelector("li.item-a"), "body", '[microscope-data]');
+      arr = D.parentsUntil(document.querySelector("li.item-a"), "body", '[microscope-data]');
       expect(arr[0]).to.equal(document.querySelector('.level-2'));
     });
   });
@@ -213,7 +224,7 @@ describe('DOMUtils', () => {
     });
 
     it('return document scrollTop', () => {
-      var scrollTop = DOMUtils.setDocumentScrollTop(100);
+      var scrollTop = D.setDocumentScrollTop(100);
       expect(scrollTop).to.equal(100);
     });
   });
@@ -231,9 +242,9 @@ describe('DOMUtils', () => {
     });
 
     it('return document scrollTop', () => {
-      DOMUtils.setDocumentScrollTop(1000);
+      D.setDocumentScrollTop(1000);
       setTimeout(() => {
-        var scrollTop = DOMUtils.getDocumentScrollTop();
+        var scrollTop = D.getDocumentScrollTop();
         expect(scrollTop).to.equal(1000);
       });
     });
@@ -252,16 +263,16 @@ describe('DOMUtils', () => {
     });
 
     it('return document scrollTop', () => {
-      DOMUtils.scrollTo(100, 100);
+      D.scrollTo(100, 100);
       setTimeout(() => {
-        expect(DOMUtils.getDocumentScrollTop()).to.equal(100);
+        expect(D.getDocumentScrollTop()).to.equal(100);
       }, 200);
     });
 
     it('return document scrollTop', () => {
-      DOMUtils.scrollTo(100);
+      D.scrollTo(100);
       setTimeout(() => {
-        expect(DOMUtils.getDocumentScrollTop()).to.equal(100);
+        expect(D.getDocumentScrollTop()).to.equal(100);
       }, 200);
     });
   });

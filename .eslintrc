@@ -6,6 +6,12 @@
     "node": true
   },
   "rules": {
-    "valid-jsdoc": 2
+    "valid-jsdoc": 2,
+    "no-param-reassign": 0,
+    "comma-dangle": 0,
+    "one-var": 0,
+    "no-else-return": 1,
+    "no-unused-expressions": 0,
+    "indent": 1
   }
 }

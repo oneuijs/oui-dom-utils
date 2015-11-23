@@ -352,7 +352,6 @@ exports.default = {
     if (typeof el === 'string') el = document.querySelectorAll(el);
     var els = el instanceof NodeList ? [].slice.call(el) : [el];
     var display = undefined;
-    var len = els.length;
     var values = [];
 
     els.forEach(function (e, index) {
@@ -372,7 +371,7 @@ exports.default = {
     });
 
     els.forEach(function (e, index) {
-      if (values[index] != null) {
+      if (values[index] !== null) {
         els[index].style.display = values[index];
       }
     });

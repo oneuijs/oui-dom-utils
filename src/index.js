@@ -3,7 +3,7 @@ const reUnit = /width|height|top|left|right|bottom|margin|padding/i;
 let _amId = 1;
 const _amDisplay = {};
 
-function getAmId (obj) {
+function getAmId(obj) {
   return obj._amId || (obj._amId = _amId++);
 }
 
@@ -346,7 +346,6 @@ export default {
     if (typeof el === 'string') el = document.querySelectorAll(el);
     const els = (el instanceof NodeList) ? [].slice.call(el) : [el];
     let display;
-    const len = els.length;
     const values = [];
 
     els.forEach((e, index) => {
@@ -356,8 +355,7 @@ export default {
           if (display === 'none') {
             values[index] = getAmDisplay(e) || '';
           }
-        }
-        else {
+        } else {
           if (display !== 'none') {
             values[index] = 'none';
             setAmDisplay(e, display);
@@ -367,7 +365,7 @@ export default {
     });
 
     els.forEach((e, index) => {
-      if ( values[index] != null ) {
+      if ( values[index] !== null ) {
         els[index].style.display = values[index];
       }
     });
@@ -385,8 +383,7 @@ export default {
   toggle(element) {
     if (element.style.display === 'none') {
       this.show(element);
-    }
-    else {
+    } else {
       this.hide(element);
     }
   },

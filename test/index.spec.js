@@ -276,4 +276,33 @@ describe('oui-dom-utils', () => {
       }, 200);
     });
   });
+
+  describe('#showHide', () => {
+    beforeEach(() => {
+      document.body.innerHTML = `
+        <div id='showHide-until-test'>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+        </div>
+      `;
+    });
+
+    afterEach(() => {
+      const el = document.querySelector('#showHide-until-test');
+      el.parentNode.removeChild(el);
+    });
+
+    it('can hide elements', () => {
+      D.showHide('elements', false);
+      expect(D.getStyle(document.querySelector('.elements'), 'display') === 'none');
+    });
+
+    it('can read the original display', () => {
+      D.showHide('elements', false);
+      D.showHide('elements', true);
+      expect(D.getStyle(document.querySelector('.elements'), 'display') === 'inline-block');
+    });
+  });
 });

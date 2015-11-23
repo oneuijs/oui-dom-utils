@@ -1,5 +1,21 @@
 /* eslint no-unused-expressions: 0 */
 const reUnit = /width|height|top|left|right|bottom|margin|padding/i;
+let _amId = 1;
+let _amDisplay = {};
+
+function getAmId (obj) {
+  return obj._amId || (obj._amId = _amId++);
+}
+
+function setAmDisplay(elem, display) {
+  let id = getAmId(elem);
+  _amDisplay[`_am_${id}`] = display;
+}
+
+function getAmDisplay(elem) {
+  let id = getAmId(elem);
+  return _amDisplay[`_am_${id}`];
+}
 
 export default {
   // el can be an Element, NodeList or selector
@@ -323,6 +339,63 @@ export default {
       }
     }
     return null;
+  },
+
+  showHide( elements, show ) {
+    if (typeof elements === 'string') {
+      elements = document.querySelectorAll(elements);
+    }
+    if (!elements.length) {
+      let element = [];
+      element[0] = elements;
+      elements = element;
+    }
+    let display;
+    let elem;
+    let len = elements.length;
+    let values = [];
+
+    for (let i = 0; i < len; i++) {
+      elem = elements[i];
+      if (!elem.style) {
+        continue;
+      }
+      display = elem.style.display;
+      if (show) {
+        if (display === 'none') {
+          values[i] = getAmDisplay(elem) || '';
+        }
+      }
+      else {
+        if (display !== 'none') {
+          values[i] = 'none';
+          setAmDisplay(elem, display);
+        }
+      }
+    }
+    for ( let index = 0; index < len; index++ ) {
+      if ( values[ index ] != null ) {
+        elements[ index ].style.display = values[ index ];
+      }
+    }
+    return elements;
+  },
+
+  show(elements) {
+    this.showHide(elements, true);
+  },
+
+  hide(elements) {
+    this.showHide(elements, false);
+  },
+
+  toogle(element) {
+    if (element.style.display === 'none') {
+      this.show(element);
+    }
+    else {
+      this.hide(element);
+    }
   },
 
   /**

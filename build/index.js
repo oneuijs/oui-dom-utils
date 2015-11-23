@@ -5,6 +5,22 @@ Object.defineProperty(exports, "__esModule", {
 });
 /* eslint no-unused-expressions: 0 */
 var reUnit = /width|height|top|left|right|bottom|margin|padding/i;
+var _amId = 1;
+var _amDisplay = {};
+
+function getAmId(obj) {
+  return obj._amId || (obj._amId = _amId++);
+}
+
+function setAmDisplay(elem, display) {
+  var id = getAmId(elem);
+  _amDisplay['_am_' + id] = display;
+}
+
+function getAmDisplay(elem) {
+  var id = getAmId(elem);
+  return _amDisplay['_am_' + id];
+}
 
 exports.default = {
   // el can be an Element, NodeList or selector
@@ -329,6 +345,51 @@ exports.default = {
       }
     }
     return null;
+  },
+
+  // el can be an Element, NodeList or selector
+  _showHide: function _showHide(el, show) {
+    if (typeof el === 'string') el = document.querySelectorAll(el);
+    var els = el instanceof NodeList ? [].slice.call(el) : [el];
+    var display = undefined;
+    var len = els.length;
+    var values = [];
+
+    els.forEach(function (e, index) {
+      if (e.style) {
+        display = e.style.display;
+        if (show) {
+          if (display === 'none') {
+            values[index] = getAmDisplay(e) || '';
+          }
+        } else {
+          if (display !== 'none') {
+            values[index] = 'none';
+            setAmDisplay(e, display);
+          }
+        }
+      }
+    });
+
+    els.forEach(function (e, index) {
+      if (values[index] != null) {
+        els[index].style.display = values[index];
+      }
+    });
+    return els;
+  },
+  show: function show(elements) {
+    this._showHide(elements, true);
+  },
+  hide: function hide(elements) {
+    this._showHide(elements, false);
+  },
+  toggle: function toggle(element) {
+    if (element.style.display === 'none') {
+      this.show(element);
+    } else {
+      this.hide(element);
+    }
   },
 
   /**

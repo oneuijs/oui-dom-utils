@@ -391,5 +391,4 @@ describe('oui-dom-utils', () => {
       expect(D.getStyle(document.querySelector('.elements'), 'display') === 'none');
     });
   });
-
 });

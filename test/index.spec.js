@@ -277,7 +277,7 @@ describe('oui-dom-utils', () => {
     });
   });
 
-  describe('#showHide', () => {
+  describe('#_showHide', () => {
     beforeEach(() => {
       document.body.innerHTML = `
         <div id='showHide-until-test'>
@@ -295,14 +295,101 @@ describe('oui-dom-utils', () => {
     });
 
     it('can hide elements', () => {
-      D.showHide('elements', false);
+      D._showHide(document.querySelector('.elements'), false);
       expect(D.getStyle(document.querySelector('.elements'), 'display') === 'none');
     });
 
     it('can read the original display', () => {
-      D.showHide('elements', false);
-      D.showHide('elements', true);
+      D._showHide('.elements', false);
+      D._showHide('.elements', true);
       expect(D.getStyle(document.querySelector('.elements'), 'display') === 'inline-block');
     });
   });
+
+  describe('#hide', () => {
+    beforeEach(() => {
+      document.body.innerHTML = `
+        <div id='showHide-until-test'>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+        </div>
+      `;
+    });
+
+    afterEach(() => {
+      const el = document.querySelector('#showHide-until-test');
+      el.parentNode.removeChild(el);
+    });
+
+    it('can hide elements', () => {
+      D.hide(document.querySelector('.elements'));
+      expect(D.getStyle(document.querySelector('.elements'), 'display') === 'none');
+    });
+
+    it('can read the original display', () => {
+      D.hide('.elements');
+      expect(D.getStyle(document.querySelectorAll('.elements')[1], 'display') === 'none');
+    });
+  });
+
+  describe('#show', () => {
+    beforeEach(() => {
+      document.body.innerHTML = `
+        <div id='showHide-until-test'>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+        </div>
+      `;
+    });
+
+    afterEach(() => {
+      const el = document.querySelector('#showHide-until-test');
+      el.parentNode.removeChild(el);
+    });
+
+    it('can read the original display', () => {
+      D.hide(document.querySelector('.elements'));
+      D.show(document.querySelector('.elements'));
+      expect(D.getStyle(document.querySelector('.elements'), 'display') === 'inline-block');
+    });
+
+    it('can read the original display', () => {
+      D.hide('.elements');
+      D.show('.elements');
+      expect(D.getStyle(document.querySelectorAll('.elements')[1], 'display') === 'inline-block');
+    });
+  });
+
+  describe('#toggle', () => {
+    beforeEach(() => {
+      document.body.innerHTML = `
+        <div id='showHide-until-test'>
+          <div class='elements' style='width: 200px; height: 200px; display: inline-block;'></div>
+        </div>
+      `;
+    });
+
+    afterEach(() => {
+      const el = document.querySelector('#showHide-until-test');
+      el.parentNode.removeChild(el);
+    });
+
+    it('can read the original display', () => {
+      D.hide(document.querySelector('.elements'));
+      D.toggle(document.querySelector('.elements'));
+      expect(D.getStyle(document.querySelector('.elements'), 'display') === 'inline-block');
+    });
+
+    it('can read the original display', () => {
+      D.hide(document.querySelector('.elements'));
+      D.show(document.querySelector('.elements'));
+      D.toggle(document.querySelector('.elements'));
+      expect(D.getStyle(document.querySelector('.elements'), 'display') === 'none');
+    });
+  });
+
 });

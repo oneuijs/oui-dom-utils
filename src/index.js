@@ -73,7 +73,7 @@ export default {
     const parent = targetEl.parentNode;
 
     if (parent.lastChild === targetEl) {
-      parent.appendChild(newEl, targetEl);
+      parent.appendChild(newEl);
     } else {
       parent.insertBefore(newEl, targetEl.nextSibling);
     }
@@ -359,7 +359,9 @@ export default {
     const els = (el instanceof NodeList) ? [].slice.call(el) : [el];
     let display;
     const values = [];
-
+    if (els.length === 0) {
+      return;
+    }
     els.forEach((e, index) => {
       if (e.style) {
         display = e.style.display;

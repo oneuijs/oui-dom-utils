@@ -383,7 +383,6 @@ export default {
         els[index].style.display = values[index];
       }
     });
-    return els;
   },
 
   show(elements) {

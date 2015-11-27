@@ -57,6 +57,18 @@ export default {
     return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
   },
 
+  // el can be an Element or selector
+  toggleClass(el, className) {
+    if (typeof el === 'string') el = document.querySelector(el);
+    const flag = this.hasClass(el, className);
+    if (flag) {
+      this.removeClass(el, className);
+    } else {
+      this.addClass(el, className);
+    }
+    return flag;
+  },
+
   insertAfter(newEl, targetEl) {
     const parent = targetEl.parentNode;
 

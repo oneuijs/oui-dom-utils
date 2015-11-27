@@ -106,6 +106,27 @@ describe('oui-dom-utils', () => {
     });
   });
 
+  describe('#toggleClass', () => {
+    beforeEach(() => {
+      document.body.innerHTML = `
+        <ul id='toggleClass-test' class='list top'>
+          <li class='item-i item'>I</li>
+        </ul>
+      `;
+    });
+
+    afterEach(() => {
+      const el = document.querySelector('#toggleClass-test');
+      el.parentNode.removeChild(el);
+    });
+
+    it('return true if has class', () => {
+      const el = document.querySelector('.item-i');
+      expect(D.toggleClass(el, 'item')).to.be.true;
+      expect(D.toggleClass(el, 'item')).to.be.false;
+    });
+  });
+
   describe('#closest', () => {
     beforeEach(() => {
       document.body.innerHTML = `

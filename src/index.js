@@ -61,7 +61,7 @@ export default {
     const parent = targetEl.parentNode;
 
     if (parent.lastChild === targetEl) {
-      parent.appendChild(newEl, targetEl);
+      parent.appendChild(newEl);
     } else {
       parent.insertBefore(newEl, targetEl.nextSibling);
     }

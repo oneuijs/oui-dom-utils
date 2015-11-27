@@ -66,11 +66,23 @@ exports.default = {
     }
     return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
   },
+
+  // el can be an Element or selector
+  toggleClass: function toggleClass(el, className) {
+    if (typeof el === 'string') el = document.querySelector(el);
+    var flag = this.hasClass(el, className);
+    if (flag) {
+      this.removeClass(el, className);
+    } else {
+      this.addClass(el, className);
+    }
+    return flag;
+  },
   insertAfter: function insertAfter(newEl, targetEl) {
     var parent = targetEl.parentNode;
 
     if (parent.lastChild === targetEl) {
-      parent.appendChild(newEl, targetEl);
+      parent.appendChild(newEl);
     } else {
       parent.insertBefore(newEl, targetEl.nextSibling);
     }
@@ -353,7 +365,9 @@ exports.default = {
     var els = el instanceof NodeList ? [].slice.call(el) : [el];
     var display = undefined;
     var values = [];
-
+    if (els.length === 0) {
+      return;
+    }
     els.forEach(function (e, index) {
       if (e.style) {
         display = e.style.display;
@@ -375,7 +389,6 @@ exports.default = {
         els[index].style.display = values[index];
       }
     });
-    return els;
   },
   show: function show(elements) {
     this._showHide(elements, true);

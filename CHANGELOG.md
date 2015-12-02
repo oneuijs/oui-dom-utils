@@ -1,3 +1,7 @@
+0.3.3 / 2015-11-27
+==================
+- Fix removeClass method issue, while the element has no a class attr.
+
 0.3.1, 0.3.2 / 2015-11-27
 ==================
 - Add toggleClass

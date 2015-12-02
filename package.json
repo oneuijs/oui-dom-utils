@@ -1,6 +1,6 @@
 {
   "name": "oui-dom-utils",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "DOM Utils of OneUI",
   "main": "build/index.js",
   "author": "oneui group",

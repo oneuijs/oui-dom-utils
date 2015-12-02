@@ -40,10 +40,12 @@ export default {
     const els = (el instanceof NodeList) ? [].slice.call(el) : [el];
 
     els.forEach(e => {
-      if (e.classList) {
-        e.classList.remove(className);
-      } else {
-        e.className = e.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+      if (this.hasClass(e, className)) {
+        if (e.classList) {
+          e.classList.remove(className);
+        } else {
+          e.className = e.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
       }
     });
   },

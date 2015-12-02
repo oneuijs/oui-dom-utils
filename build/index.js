@@ -46,14 +46,18 @@ exports.default = {
 
   // el can be an Element, NodeList or selector
   removeClass: function removeClass(el, className) {
+    var _this2 = this;
+
     if (typeof el === 'string') el = document.querySelectorAll(el);
     var els = el instanceof NodeList ? [].slice.call(el) : [el];
 
     els.forEach(function (e) {
-      if (e.classList) {
-        e.classList.remove(className);
-      } else {
-        e.className = e.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+      if (_this2.hasClass(e, className)) {
+        if (e.classList) {
+          e.classList.remove(className);
+        } else {
+          e.className = e.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
       }
     });
   },
@@ -192,7 +196,7 @@ exports.default = {
     }
   },
   setStyles: function setStyles(el, hash) {
-    var _this2 = this;
+    var _this3 = this;
 
     var HAS_CSSTEXT_FEATURE = typeof el.style.cssText !== 'undefined';
     function trim(str) {
@@ -214,7 +218,7 @@ exports.default = {
 
     var styleObj = {};
     Object.keys(hash).forEach(function (item) {
-      _this2.setStyle(el, item, hash[item], styleObj);
+      _this3.setStyle(el, item, hash[item], styleObj);
     });
     var mergedStyleObj = Object.assign({}, originStyleObj, styleObj);
     var styleText = Object.keys(mergedStyleObj).map(function (item) {
@@ -411,7 +415,7 @@ exports.default = {
    * @return {Null}            return null
    */
   scrollTo: function scrollTo() {
-    var _this3 = this;
+    var _this4 = this;
 
     var to = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
     var duration = arguments.length <= 1 || arguments[1] === undefined ? 16 : arguments[1];
@@ -423,14 +427,14 @@ exports.default = {
     var perTick = diff / duration * 10;
     requestAnimationFrame(function () {
       if (Math.abs(perTick) > Math.abs(diff)) {
-        _this3.setDocumentScrollTop(_this3.getDocumentScrollTop() + diff);
+        _this4.setDocumentScrollTop(_this4.getDocumentScrollTop() + diff);
         return;
       }
-      _this3.setDocumentScrollTop(_this3.getDocumentScrollTop() + perTick);
-      if (diff > 0 && _this3.getDocumentScrollTop() >= to || diff < 0 && _this3.getDocumentScrollTop() <= to) {
+      _this4.setDocumentScrollTop(_this4.getDocumentScrollTop() + perTick);
+      if (diff > 0 && _this4.getDocumentScrollTop() >= to || diff < 0 && _this4.getDocumentScrollTop() <= to) {
         return;
       }
-      _this3.scrollTo(to, duration - 16);
+      _this4.scrollTo(to, duration - 16);
     });
   },
 

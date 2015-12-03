@@ -420,6 +420,18 @@ describe('oui-dom-utils', () => {
       expect(D.width(el)).to.equal(1.5);
     });
 
+    it('should return width without padding and border when in `content-box`', () => {
+      document.body.innerHTML = '<div id="test" style="width: 10px;padding: 2px; border: 2px #fff solid;"></div>';
+      const el = document.getElementById('test');
+      expect(D.width(el)).to.equal(2);
+    });
+
+    it('should return width specified in CSS when in `border-box`', () => {
+      document.body.innerHTML = '<div id="test" style="width: 10px;padding: 2px; border: 2px #fff solid;box-sizing: border-box;"></div>';
+      const el = document.getElementById('test');
+      expect(D.width(el)).to.equal(10);
+    });
+
     it('should return proper width even if parent is invisible', () => {
       document.body.innerHTML = '<div style="display: none;"><div id="test" style="width: 1.5px"></div></div>';
       const el = document.getElementById('test');

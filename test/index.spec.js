@@ -412,4 +412,30 @@ describe('oui-dom-utils', () => {
       expect(D.getStyle(document.querySelector('.elements'), 'display') === 'none');
     });
   });
+
+  describe('#width & height', () => {
+    it('should return decimal width', () => {
+      document.body.innerHTML = '<div id="test" style="width: 1.5px"></div>';
+      const el = document.getElementById('test');
+      expect(D.width(el)).to.equal(1.5);
+    });
+
+    it('should return proper width even if parent is invisible', () => {
+      document.body.innerHTML = '<div style="display: none;"><div id="test" style="width: 1.5px"></div></div>';
+      const el = document.getElementById('test');
+      expect(D.width(el)).to.equal(1.5);
+    });
+
+    it('should return px when width is implicit', () => {
+      document.body.innerHTML = '<div style="width: 200px;"><div id="test" style="width: 20%;"></div></div>';
+      const el = document.getElementById('test');
+      expect(D.width(el)).to.equal(40);
+    });
+
+    it('shold return 0 when parent is invisible and width is implicit', () => {
+      document.body.innerHTML = '<div style="width: 200px;display: none;"><div id="test" style="width: 20%;"></div></div>';
+      const el = document.getElementById('test');
+      expect(D.width(el)).to.equal(0);
+    });
+  });
 });

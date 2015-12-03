@@ -80,7 +80,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    browsers: ['Firefox'],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
@@ -91,5 +91,5 @@ module.exports = function(config) {
     // concurrency: Infinity,
 
     // plugins: ['karma-phantomjs-launcher', 'karma-sourcemap-loader', 'karma-webpack']
-  })
-}
+  });
+};

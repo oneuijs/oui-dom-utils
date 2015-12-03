@@ -444,7 +444,13 @@ exports.default = {
   },
   width: function width(el) {
     var styles = this.getComputedStyles(el);
-    var width = el.offsetWidth;
+    var width = parseFloat(styles.width.indexOf('px') !== -1 ? styles.width : 0);
+
+    var boxSizing = styles.boxSizing || 'content-box';
+    if (boxSizing === 'border-box') {
+      return width;
+    }
+
     var borderLeftWidth = parseFloat(styles.borderLeftWidth);
     var borderRightWidth = parseFloat(styles.borderRightWidth);
     var paddingLeft = parseFloat(styles.paddingLeft);
@@ -453,7 +459,13 @@ exports.default = {
   },
   height: function height(el) {
     var styles = this.getComputedStyles(el);
-    var height = el.offsetHeight;
+    var height = parseFloat(styles.height.indexOf('px') !== -1 ? styles.height : 0);
+
+    var boxSizing = styles.boxSizing || 'content-box';
+    if (boxSizing === 'border-box') {
+      return height;
+    }
+
     var borderTopWidth = parseFloat(styles.borderTopWidth);
     var borderBottomWidth = parseFloat(styles.borderBottomWidth);
     var paddingTop = parseFloat(styles.paddingTop);

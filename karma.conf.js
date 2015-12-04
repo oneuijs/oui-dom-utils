@@ -38,16 +38,13 @@ module.exports = function(config) {
       ]
     },
 
+    webpackMiddleware: {
+      stats: 'minimal'
+    },
+
     webpack: {
       cache: true,
       devtool: 'inline-source-map',
-
-      stats: {
-        colors: true,
-        reasons: true,
-        chunks: false
-      },
-
       module: {
         loaders: [{
           test: /\.jsx?$/,
@@ -91,5 +88,5 @@ module.exports = function(config) {
     // concurrency: Infinity,
 
     // plugins: ['karma-phantomjs-launcher', 'karma-sourcemap-loader', 'karma-webpack']
-  });
-};
+  })
+}

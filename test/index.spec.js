@@ -1,14 +1,3 @@
-// FIXME: PhantomJS 1.9 doesn't support rAF, but IE10+ supports
-window.requestAnimationFrame = (function() {
-  return window.requestAnimationFrame ||
-         window.webkitRequestAnimationFrame ||
-         window.mozRequestAnimationFrame ||
-         function(callback) {
-           window.setTimeout(callback, 1000 / 60);
-         };
-})();
-
-
 import { expect } from 'chai';
 import D from '../src/index.js';
 

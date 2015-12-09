@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 var reUnit = /width|height|top|left|right|bottom|margin|padding/i;
 var _amId = 1;
 var _amDisplay = {};
+var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
 
 function getAmId(obj) {
   return obj._amId || (obj._amId = _amId++);

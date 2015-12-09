@@ -2,6 +2,9 @@
 const reUnit = /width|height|top|left|right|bottom|margin|padding/i;
 let _amId = 1;
 const _amDisplay = {};
+const requestAnimationFrame = window.requestAnimationFrame ||
+window.webkitRequestAnimationFrame ||
+window.mozRequestAnimationFrame;
 
 function getAmId(obj) {
   return obj._amId || (obj._amId = _amId++);

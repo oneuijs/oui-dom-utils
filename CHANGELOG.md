@@ -1,3 +1,7 @@
+0.3.5 / 2015-12-09
+==================
+fix scrollTo bug
+
 0.3.3 / 2015-11-27
 ==================
 - Fix removeClass method issue, while the element has no a class attr.

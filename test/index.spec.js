@@ -262,13 +262,11 @@ describe('oui-dom-utils', () => {
       el.parentNode.removeChild(el);
     });
 
-    it.only('return document scrollTop', function(done) {
-      document.body.style.height = '10000px';
+    it('return document scrollTop', function(done) {
       scrollTo(1, 1000);
       this.timeout(9999999);
       setTimeout(function() {
         const top = D.getDocumentScrollTop();
-        console.log(top)
         expect(top).to.equal(1000);
         done();
       }, 2000);
@@ -290,6 +288,9 @@ describe('oui-dom-utils', () => {
     it('return document scrollTop', function(done) {
       this.timeout(9999999);
       D.scrollTo(100, 100);
+      setTimeout(() => {
+        D.scrollTo(100, 100);
+      }, 200);
       setTimeout(() => {
         expect(D.getDocumentScrollTop()).to.equal(100);
         done();

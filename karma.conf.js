@@ -38,16 +38,13 @@ module.exports = function(config) {
       ]
     },
 
+    webpackMiddleware: {
+      stats: 'minimal'
+    },
+
     webpack: {
       cache: true,
       devtool: 'inline-source-map',
-
-      stats: {
-        colors: true,
-        reasons: true,
-        chunks: false
-      },
-
       module: {
         loaders: [{
           test: /\.jsx?$/,
@@ -80,7 +77,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    browsers: ['Firefox'],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits

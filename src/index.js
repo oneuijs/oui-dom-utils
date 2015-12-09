@@ -438,7 +438,13 @@ export default {
 
   width(el) {
     const styles = this.getComputedStyles(el);
-    const width = el.offsetWidth;
+    const width = parseFloat(styles.width.indexOf('px') !== -1 ? styles.width : 0);
+
+    const boxSizing = styles.boxSizing || 'content-box';
+    if (boxSizing === 'border-box') {
+      return width;
+    }
+
     const borderLeftWidth = parseFloat(styles.borderLeftWidth);
     const borderRightWidth = parseFloat(styles.borderRightWidth);
     const paddingLeft = parseFloat(styles.paddingLeft);
@@ -448,7 +454,13 @@ export default {
 
   height(el) {
     const styles = this.getComputedStyles(el);
-    const height = el.offsetHeight;
+    const height = parseFloat(styles.height.indexOf('px') !== -1 ? styles.height : 0);
+
+    const boxSizing = styles.boxSizing || 'content-box';
+    if (boxSizing === 'border-box') {
+      return height;
+    }
+
     const borderTopWidth = parseFloat(styles.borderTopWidth);
     const borderBottomWidth = parseFloat(styles.borderBottomWidth);
     const paddingTop = parseFloat(styles.paddingTop);

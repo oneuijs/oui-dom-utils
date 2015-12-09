@@ -414,6 +414,9 @@ export default {
       return;
     }
     const diff = to - this.getDocumentScrollTop();
+    if (diff === 0) {
+      return;
+    }
     const perTick = diff / duration * 10;
     requestAnimationFrame(() => {
       if (Math.abs(perTick) > Math.abs(diff)) {

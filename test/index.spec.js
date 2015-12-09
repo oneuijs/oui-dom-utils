@@ -250,10 +250,10 @@ describe('oui-dom-utils', () => {
     });
   });
 
-   describe('#getDocumentScrollTop', () => {
+  describe('#getDocumentScrollTop', () => {
     beforeEach(() => {
       document.body.innerHTML = `
-        <div id='getDocumentScrollTop-until-test' style='height: 3000px'></div>
+        <div id='getDocumentScrollTop-until-test' style='height: 30000px; width: 1000px;'></div>
       `;
     });
 
@@ -262,12 +262,16 @@ describe('oui-dom-utils', () => {
       el.parentNode.removeChild(el);
     });
 
-    it('return document scrollTop', () => {
-      D.setDocumentScrollTop(1000);
-      setTimeout(() => {
-        const scrollTop = D.getDocumentScrollTop();
-        expect(scrollTop).to.equal(1000);
-      });
+    it.only('return document scrollTop', function(done) {
+      document.body.style.height = '10000px';
+      scrollTo(1, 1000);
+      this.timeout(9999999);
+      setTimeout(function() {
+        const top = D.getDocumentScrollTop();
+        console.log(top)
+        expect(top).to.equal(1000);
+        done();
+      }, 2000);
     });
   });
 
@@ -283,11 +287,13 @@ describe('oui-dom-utils', () => {
       el.parentNode.removeChild(el);
     });
 
-    it('return document scrollTop', () => {
+    it('return document scrollTop', function(done) {
+      this.timeout(9999999);
       D.scrollTo(100, 100);
       setTimeout(() => {
         expect(D.getDocumentScrollTop()).to.equal(100);
-      }, 200);
+        done();
+      }, 2000);
     });
 
     it('return document scrollTop', () => {

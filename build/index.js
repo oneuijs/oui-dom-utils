@@ -264,7 +264,7 @@ exports.default = {
     // null means not return presudo styles
     var computed = win.getComputedStyle(el, null);
 
-    return att ? computed.att : computed;
+    return att ? computed[att] : computed;
   },
   getPageSize: function getPageSize() {
     var xScroll = undefined,

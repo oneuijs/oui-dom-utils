@@ -1,3 +1,7 @@
+0.3.7 / 2016-02-17
+==================
+fix typo in getComputedStyle
+
 0.3.6 / 2016-02-17
 ==================
 fix requestAnimationFrame on server side error

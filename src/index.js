@@ -2,9 +2,20 @@
 const reUnit = /width|height|top|left|right|bottom|margin|padding/i;
 let _amId = 1;
 const _amDisplay = {};
-const requestAnimationFrame = window.requestAnimationFrame ||
-window.webkitRequestAnimationFrame ||
-window.mozRequestAnimationFrame;
+
+let requestAnimationFrame;
+if (typeof window !== 'undefined') {
+  requestAnimationFrame = window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    function(callback) {
+      window.setTimeout(callback, 1000 / 60);
+    };
+} else {
+  requestAnimationFrame = function() {
+    throw new Error('requestAnimationFrame is not supported, maybe you are running in the server side');
+  };
+}
 
 function getAmId(obj) {
   return obj._amId || (obj._amId = _amId++);
@@ -351,9 +362,9 @@ export default {
     while (el) {
       if (matchesSelector.call(el, selector)) {
         return el;
-      } else {
-        el = el.parentElement;
       }
+
+      el = el.parentElement;
     }
     return null;
   },

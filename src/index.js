@@ -264,7 +264,7 @@ export default {
     // null means not return presudo styles
     const computed = win.getComputedStyle(el, null);
 
-    return att ? computed.att : computed;
+    return att ? computed[att] : computed;
   },
 
   getPageSize() {

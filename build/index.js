@@ -7,7 +7,17 @@ Object.defineProperty(exports, "__esModule", {
 var reUnit = /width|height|top|left|right|bottom|margin|padding/i;
 var _amId = 1;
 var _amDisplay = {};
-var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
+
+var requestAnimationFrame = undefined;
+if (typeof window !== 'undefined') {
+  requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
+    window.setTimeout(callback, 1000 / 60);
+  };
+} else {
+  requestAnimationFrame = function () {
+    throw new Error('requestAnimationFrame is not supported, maybe you are running in the server side');
+  };
+}
 
 function getAmId(obj) {
   return obj._amId || (obj._amId = _amId++);
@@ -357,9 +367,9 @@ exports.default = {
     while (el) {
       if (matchesSelector.call(el, selector)) {
         return el;
-      } else {
-        el = el.parentElement;
       }
+
+      el = el.parentElement;
     }
     return null;
   },

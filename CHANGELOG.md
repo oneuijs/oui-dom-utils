@@ -1,3 +1,7 @@
+0.3.6 / 2016-02-17
+==================
+fix requestAnimationFrame on server side error
+
 0.3.5 / 2015-12-09
 ==================
 fix scrollTo bug

@@ -93,6 +93,11 @@ describe('oui-dom-utils', () => {
       expect(D.hasClass('.item', 'item-i')).to.be.true;
       expect(D.hasClass('.item', 'item-ii')).to.be.false;
     });
+
+    it('document.querySelector return null', () => {
+      expect(D.hasClass('.test', 'item-i')).to.be.false;
+      expect(D.hasClass('.test', 'item-ii')).to.be.false;
+    });
   });
 
   describe('#toggleClass', () => {

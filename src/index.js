@@ -67,6 +67,9 @@ export default {
   // el can be an Element or selector
   hasClass(el, className) {
     if (typeof el === 'string') el = document.querySelector(el);
+    if (!el) {
+      return false;
+    }
     if (el.classList) {
       return el.classList.contains(className);
     }
